@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  id       Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(20)
+  emotions emotions[]
+  habits   habits[]
+  posts    posts[]
+}
+
+model comments {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content    String?   @db.VarChar(200)
+  id_post    String    @db.Uuid
+  id_user    String    @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  posts      posts     @relation(fields: [id_post], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users      users     @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model emotions {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String      @db.VarChar(30)
+  img_url     String      @db.VarChar(200)
+  id_user     String?     @db.Uuid
+  id_category Int
+  categories  categories  @relation(fields: [id_category], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users       users?      @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  favorites   favorites[]
+  records     records[]
+}
+
+model favorites {
+  id_emotion String   @db.Uuid
+  id_user    String   @db.Uuid
+  emotions   emotions @relation(fields: [id_emotion], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users      users    @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([id_user, id_emotion])
+}
+
+model forums {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  min_age Int?
+  max_age Int?
+  posts   posts[]
+  users   users[]
+}
+
+model habits {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String          @db.VarChar(20)
+  id_category   Int
+  categories    categories      @relation(fields: [id_category], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  record_habits record_habits[]
+}
+
+model posts {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_user     String     @db.Uuid
+  id_category Int
+  id_forum    String     @db.Uuid
+  title       String     @db.VarChar(100)
+  content     String     @db.VarChar(500)
+  created_at  DateTime?  @default(now()) @db.Timestamp(6)
+  comments    comments[]
+  categories  categories @relation(fields: [id_category], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forums      forums     @relation(fields: [id_forum], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users       users      @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model record_habits {
+  id_record String  @db.Uuid
+  id_habit  String  @db.Uuid
+  habits    habits  @relation(fields: [id_habit], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  records   records @relation(fields: [id_record], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([id_record, id_habit])
+}
+
+model records {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  date          DateTime        @db.Date
+  note          String?         @db.VarChar(200)
+  id_user       String          @db.Uuid
+  id_emotion    String          @db.Uuid
+  record_habits record_habits[]
+  emotions      emotions        @relation(fields: [id_emotion], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users         users           @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firebase_uid String        @unique @db.VarChar(200)
+  username     String?       @unique @db.VarChar(20)
+  email        String?       @unique @db.VarChar(40)
+  birth_day    DateTime      @db.Date
+  start_date   DateTime?     @default(now()) @db.Timestamp(6)
+  id_forum     String?       @db.Uuid
+  comments     comments[]
+  emotions     emotions[]
+  favorites    favorites[]
+  posts        posts[]
+  records      records[]
+  forums       forums?       @relation(fields: [id_forum], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  weekly_form  weekly_form[]
+}
+
+model weekly_form {
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_user String   @db.Uuid
+  date    DateTime @db.Date
+  answers Json?
+  users   users    @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
