@@ -12,6 +12,16 @@ export const getFormById = async (id: string) => {
     return form;
 };
 
+export const getFormsByWeek = async (dateString: string) => {
+    const startDate = new Date(dateString);
+    if (isNaN(startDate.getTime())) throw new Error("Fecha inválida");
+
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 7);
+
+    return await formRepository.findByDateRange(startDate, endDate);
+};
+
 /*
 export const getFormsByUser = async (userId: string) => {
     return await formService.findByUserId(userId);

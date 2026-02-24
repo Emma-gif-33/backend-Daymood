@@ -12,3 +12,15 @@ export const findById = (id: string) => {
     });
 };
 
+export const findByDateRange = (startDate: Date, endDate: Date) => {
+    return prisma.weekly_form.findMany({
+        where: {
+            date: {
+                gte: startDate,
+                lte: endDate
+            }
+        },
+        orderBy: { date: 'asc' }
+    });
+};
+
