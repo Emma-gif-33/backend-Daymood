@@ -15,7 +15,7 @@ export const getById = async (req: Request, res: Response, next: NextFunction) =
     try {
         const { id } = req.params;
         if (typeof id !== 'string') {
-            return res.status(400).json({ message: "ID inválido" });
+            return res.status(404).json({ message: "ID inválido, intente con uno existente." });
         }
         const form = await formService.getFormById(id);
         res.json(form);
