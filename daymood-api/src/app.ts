@@ -1,4 +1,7 @@
 import express from 'express';
+import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
+import { Response } from 'express';
+import emotionRoutes from './emotionService/routes/emotion.routes';
 
 const app = express();
 
@@ -15,6 +18,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.json({ message: 'Si jala' });
 });
+
+app.use('/emotions', emotionRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {

@@ -12,12 +12,11 @@ const uploadImageToFirebase = async (file: Express.Multer.File): Promise<string>
         metadata: { contentType: file.mimetype }
     })
 
-    //devuelve el url público de la imagen
+
     await fileUpload.makePublic()
     return `https://storage.googleapis.com/${bucket.name}/${fileName}`
 }
 
-// ── Emociones ────────────────────────────────────────────────
 
 export const emotionList = async (idUser: string) => {
     return emotionRepository.findAllForUser(idUser)
@@ -32,7 +31,6 @@ export const createEmotion = async (
     idUser: string,
     imageFile: Express.Multer.File | undefined
 ) => {
-    // Validaciones
     if (!data.name || !data.id_category) {
         throw new Error('El nombre y la categoría son obligatorios')
     }
@@ -40,15 +38,15 @@ export const createEmotion = async (
         throw new Error('La imagen es obligatoria')
     }
 
-    // Subir imagen y obtener URL
+
     const img_url = await uploadImageToFirebase(imageFile)
 
     return emotionRepository.create({
         name: data.name,
         img_url,
-        id_user: idUser,          // conecta con el usuario dueño
+        id_user: idUser,          
         categories: {
-            connect: { id: data.id_category }   // conecta con la categoría existente
+            connect: { id: data.id_category }   
         }
     } as any)
 }
@@ -69,7 +67,7 @@ export const deleteEmotion = async (id: string, idUser: string) => {
 
 
 export const addFavorite = async (idUser: string, idEmotion: string) => {
-    // Verificar que la emoción existe antes de agregarla
+    //verificar q existe antes de agregar
     const emotion = await emotionRepository.findById(idEmotion)
     if (!emotion) {
         throw new Error('Emoción no encontrada')
