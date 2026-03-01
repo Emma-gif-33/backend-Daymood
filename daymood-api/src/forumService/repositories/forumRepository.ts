@@ -1,0 +1,35 @@
+import { prisma } from "@/prisma/client";
+
+export const findAvailableForums = (categoryId: number) => {
+    return prisma.forums.findMany({
+        where: {
+            posts: {
+                some: { id_category: categoryId }
+            }
+        },
+        include: {
+            _count: {
+                select: { users: true }
+            }
+        }
+    });
+};
+
+export const getForumInfo = (forumId: string) => {
+    return prisma.forums.findUnique({
+        where: { id: forumId },
+        include: {
+            users: true, // Miembros del grupo
+            posts: {
+                include: {
+                    users: true, // Autor del post
+                    comments: {
+                        include: {
+                            users: true // Autor del comentario
+                        }
+                    }
+                }
+            }
+        }
+    });
+};
