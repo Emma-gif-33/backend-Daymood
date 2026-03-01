@@ -1,26 +1,23 @@
 import { BigQuery } from '@google-cloud/bigquery';
-import { OAuth2Client } from 'google-auth-library';
+import path from 'path';
 
-export async function insertSnapshot(accessToken: string) {
-  const authClient = new OAuth2Client();
-  authClient.setCredentials({ access_token: accessToken });
+const bigquery = new BigQuery({
+  keyFilename: 'service-account.json',
+  projectId: 'data-from-software'
+});
 
-  const bigquery = new BigQuery({
-    projectId: 'data-from-software',
-    authClient
-  });
+export async function insertTestRow() {
+  const dataset = bigquery.dataset('benchmarking_warehouse');
+  const table = dataset.table('daily_query_metrics');
 
   const rows = [
     {
       project_id: 1,
-      snapshot_date: '2026-02-24',
-      calls: 50,
-      mean_exec_time_ms: 30.2
+      snapshot_date: new Date().toISOString().split('T')[0],
+      calls: 10,
+      mean_exec_time_ms: 25
     }
   ];
-
-  const dataset = bigquery.dataset('benchmarking_warehouse');
-  const table = dataset.table('daily_query_metrics');
 
   await table.insert(rows);
 }

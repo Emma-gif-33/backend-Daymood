@@ -1,4 +1,6 @@
 import express from 'express';
+import bigQueryRoutes from './bigQueryService/bigquery.routes';
+
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.json({ message: 'Si jala' });
 });
+
+app.use('/api/v1/bigquery', bigQueryRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
