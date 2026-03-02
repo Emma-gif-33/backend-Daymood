@@ -1,6 +1,7 @@
 import express from 'express';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
+import emotionRoutes from './emotionService/routes/emotion.routes';
 
 const app = express();
 
