@@ -2,3 +2,9 @@ node_modules
 # Keep environment variables out of version control
 .env
 /src/generated/prism
+
+#Big query
+service-account.json
+
+#Firebase
+serviceAccountKey.json
