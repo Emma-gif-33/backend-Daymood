@@ -20,9 +20,10 @@ export const verifyToken = async (
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken; // { uid, email, ... }
+    req.user = decodedToken;
     next();
   } catch (error) {
+    console.log('ERROR VERIFICANDO TOKEN:', error); // ← agrega esto
     return res.status(401).json({ success: false, message: 'Token inválido o expirado' });
   }
 };
