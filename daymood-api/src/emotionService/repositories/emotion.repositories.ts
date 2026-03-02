@@ -2,6 +2,12 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+export const findUserByFirebaseUid = (firebaseUid: string) => {
+    return prisma.users.findUnique({
+        where: { firebase_uid: firebaseUid }
+    })
+}
+
 export const create = (data: Prisma.emotionsCreateInput) => {
     return prisma.emotions.create({ data })
 }
