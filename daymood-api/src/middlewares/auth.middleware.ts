@@ -7,7 +7,6 @@ export interface AuthRequest extends Request {
 }
 
 export const verifyToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    /*
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Token no proporcionado' });
@@ -17,16 +16,13 @@ export const verifyToken = async (req: AuthRequest, res: Response, next: NextFun
 
     try {
         const decodedToken = await admin.auth().verifyIdToken(token);
-
-        // Buscamos en la DB usando firebase_uid
         const dbUser = await prisma.users.findUnique({
             where: { firebase_uid: decodedToken.uid }
         });
 
         if (!dbUser) {
-            return res.status(404).json({ message: "Usuario no encontrado en DB" });
+            return res.status(404).json({ message: "Usuario no registrado en la base de datos" });
         }
-
         const today = new Date();
         const birthDate = new Date(dbUser.birth_day);
         let age = today.getFullYear() - birthDate.getFullYear();
@@ -34,16 +30,13 @@ export const verifyToken = async (req: AuthRequest, res: Response, next: NextFun
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-     */
-    req.user = {
-        id: "7c3d8119-16d2-44c1-807f-77f981b3a11e",
-        age: 22, // Asegúrate de que coincida con el rango del foro de tu SEED
-        firebase_uid: "firebase_uid_test_1"
-    };
+        req.user = { ...dbUser, age };
         next();
-        /*
-    } catch (error) {
-        return res.status(401).json({ message: 'Token inválido' });
+    } catch (error: any) {
+        console.error("❌ Error de Firebase:", error.message); // <--- ESTO ES VITAL
+        if (error.code === 'auth/id-token-expired') {
+            return res.status(401).json({ message: "El token ya expiró, genera uno nuevo" });
+        }
+        return res.status(401).json({ message: "Token inválido", detail: error.message });
     }
-         */
 };

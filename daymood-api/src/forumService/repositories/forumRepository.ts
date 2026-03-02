@@ -2,11 +2,11 @@ import { prisma } from "../../../prisma/prisma.client";
 
 export const findAvailableForums = (categoryId: number) => {
     return prisma.forums.findMany({
+        where: {
+            id_category: categoryId // Ahora sí filtramos directo por la columna
+        },
         include: {
-            _count: {
-                select: { users: true }
-            },
-            posts: true // Para ver si se crearon posts
+            _count: { select: { users: true } }
         }
     });
 };
