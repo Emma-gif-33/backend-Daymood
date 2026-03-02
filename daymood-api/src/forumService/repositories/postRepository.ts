@@ -1,4 +1,4 @@
-import { prisma } from "@/prisma/client";
+import { prisma } from "../../../prisma/prisma.client";
 
 export const create = (data: { title: string, content: string, id_user: string, id_category: number, id_forum: string }) => {
     return prisma.posts.create({

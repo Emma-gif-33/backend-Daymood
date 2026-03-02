@@ -4,8 +4,14 @@ import * as forumService from '../services/forumService';
 export const getAvailable = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { categoryId } = req.params;
-        // La edad ses upone que vanga del middleware
-        const forums = await forumService.getForumsByCategory(Number(categoryId), req.user.age);
+        const user = (req as any).user;
+
+        if (!req.user || req.user.age === undefined) {
+            console.error("ERROR: El middleware no inyectó la edad. req.user es:", req.user);
+            return res.status(401).json({ message: "No se pudo determinar la edad del usuario" });
+        }
+
+        const forums = await forumService.getForumsByCategory(Number(categoryId), user.age);
         res.json(forums);
     } catch (error) {
         next(error);

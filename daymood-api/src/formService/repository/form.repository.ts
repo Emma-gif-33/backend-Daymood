@@ -1,4 +1,4 @@
-import {prisma} from "@/prisma.client";
+import { prisma } from "../../../prisma/prisma.client";
 
 export const findAll = () => {
     return prisma.weekly_form.findMany({

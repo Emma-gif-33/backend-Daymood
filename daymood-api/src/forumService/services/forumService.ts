@@ -12,7 +12,10 @@ export const getForumsByCategory = async (categoryId: number, userAge: number) =
     const range = getAgeRange(userAge);
     const forums = await forumRepository.findAvailableForums(categoryId);
 
-    return forums.filter((f: { min_age: number; max_age: number; }) => f.min_age === range.min && f.max_age === range.max);
+    // Filtramos por el rango de edad que calculamos
+    return forums.filter((f: any) =>
+        f.min_age === range.min && f.max_age === range.max
+    );
 };
 
 export const getFullForumContent = async (forumId: string) => {
