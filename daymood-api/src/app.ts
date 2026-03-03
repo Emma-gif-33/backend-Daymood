@@ -1,7 +1,11 @@
 import express from 'express';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
-import emotionRoutes from './emotionService/routes/emotion.routes';
+import forumRoutes from "./forumService/routes/forumRoutes";
+import postRoutes from "./forumService/routes/postRoutes";
+import commentRoutes from "./forumService/routes/commentRoutes";
+import formRoutes from "./formService/route/form.routes";
+import emotionRoutes from "./emotionService/routes/emotion.routes";
 
 const app = express();
 
@@ -42,6 +46,13 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
         bodyRecibido: req.body
     });
 });
+
+app.use('/api/forums', forumRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/forms', formRoutes);
+app.use('/api/emotions', emotionRoutes);
+
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
     console.log(`Ruta no encontrada: ${req.method} ${req.path}`);
