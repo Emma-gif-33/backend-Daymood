@@ -1,12 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import * as postService from '../services/postService';
 
-export const createNewPost = async (req: any, res: Response, next: NextFunction) => {
+// postController.ts
+export const createNewPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const user = (req as any).user;
+        if (!user || !user.id) {
+            console.error("DEBUG: req.user no llegó al postController");
+            return res.status(401).json({ message: "Usuario no identificado" });
+        }
+        const { title, content, id_category, id_forum } = req.body;
         const newPost = await postService.createPost({
-            ...req.body,
-            id_user: req.user.id
+            title,
+            content,
+            id_category,
+            id_forum,
+            id_user: user.id // Aquí es donde tronaba
         });
+
         res.status(201).json(newPost);
     } catch (error) {
         next(error);
