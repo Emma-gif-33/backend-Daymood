@@ -4,8 +4,10 @@ import { AuthRequest } from '../../middlewares/auth.middleware'
 
 export const create = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
+        
         const record = await recordService.createRecord(req.user!.uid, req.body)
         res.status(201).json({ success: true, data: record })
+
     } catch (error: any) {
         // Errores de validación de negocio van como 400
         const businessErrors = [
