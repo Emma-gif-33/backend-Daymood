@@ -1,6 +1,7 @@
 import express from 'express';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
+import recordsRoutes from './recordService/routes/record.routes';
 
 const app = express();
 
@@ -41,6 +42,11 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
         bodyRecibido: req.body
     });
 });
+
+
+app.use('/records', recordsRoutes);
+
+
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
     console.log(`Ruta no encontrada: ${req.method} ${req.path}`);
