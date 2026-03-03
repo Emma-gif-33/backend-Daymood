@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.json({ message: 'Si jala' });
 });
 
-app.use('/emotions', emotionRoutes);
+app.use('/api/emotions', emotionRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
