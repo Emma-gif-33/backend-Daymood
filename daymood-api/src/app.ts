@@ -5,6 +5,9 @@ import forumRoutes from "./forumService/routes/forumRoutes";
 import postRoutes from "./forumService/routes/postRoutes";
 import commentRoutes from "./forumService/routes/commentRoutes";
 import formRoutes from "./formService/route/form.routes";
+import multer from 'multer'
+import * as emotionController from '../src/emotionService/controllers/emotion.controllers'
+import router from "./formService/route/form.routes";
 import emotionRoutes from "./emotionService/routes/emotion.routes";
 
 const app = express();
@@ -47,11 +50,21 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
     });
 });
 
+const upload = multer({ storage: multer.memoryStorage() })
+
 app.use('/api/forums', forumRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/forms', formRoutes);
 app.use('/api/emotions', emotionRoutes);
+router.get('/favorites', verifyToken, emotionController.getFavorites)
+router.post('/favorites/:id', verifyToken, emotionController.addFavorite)
+router.delete('/favorites/:id', verifyToken, emotionController.removeFavorite)
+
+router.get('/explore', verifyToken, emotionController.explore)
+router.get('/', verifyToken, emotionController.getAll)
+router.post('/', verifyToken, upload.single('image'), emotionController.create)
+router.delete('/:id', verifyToken, emotionController.deleteEmotion)
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
