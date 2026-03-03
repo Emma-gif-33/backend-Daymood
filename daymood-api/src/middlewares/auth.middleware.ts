@@ -33,7 +33,6 @@ export const verifyToken = async (req: AuthRequest, res: Response, next: NextFun
         req.user = { ...dbUser, age };
         next();
     } catch (error: any) {
-        console.error("❌ Error de Firebase:", error.message); // <--- ESTO ES VITAL
         if (error.code === 'auth/id-token-expired') {
             return res.status(401).json({ message: "El token ya expiró, genera uno nuevo" });
         }
