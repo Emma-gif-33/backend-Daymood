@@ -66,7 +66,7 @@ app.use('/api/forms', formRoutes);
 app.use('/api/emotions', emotionRoutes);
 app.use('/api/stats', statsRoutes);
 
-app.use('/api/v1/bigquery', bigQueryRoutes);
+app.use('/api/bigquery', bigQueryRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
