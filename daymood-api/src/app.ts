@@ -10,6 +10,8 @@ import formRoutes from "./formService/route/form.routes";
 import multer from 'multer'
 import emotionRoutes from "./emotionService/routes/emotion.routes";
 import statsRoutes from "./analiticsService/routes/statsRoutes";
+import bigQueryRoutes from './bigQueryService/bigquery.routes';
+
 
 const app = express();
 
@@ -64,6 +66,7 @@ app.use('/api/forms', formRoutes);
 app.use('/api/emotions', emotionRoutes);
 app.use('/api/stats', statsRoutes);
 
+app.use('/api/v1/bigquery', bigQueryRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
