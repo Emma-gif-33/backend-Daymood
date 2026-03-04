@@ -44,7 +44,7 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
 });
 
 
-app.use('/records', recordsRoutes);
+app.use('/api/records', recordsRoutes);
 
 
 // Catch-all para rutas no encontradas

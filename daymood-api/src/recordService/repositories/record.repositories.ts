@@ -100,3 +100,26 @@ export const findRecordByDate = (idUser: string, date: Date) => {
         }
     })
 }
+
+export const findPreviewByMonth = (idUser: string, year: number, month: number) => {
+    const start = new Date(year, month - 1, 1)
+    const end = new Date(year, month, 1)
+
+    return prisma.records.findMany({
+        where: {
+            id_user: idUser,
+            date: { gte: start, lt: end }
+        },
+        select: {
+            id: true,
+            date: true,
+            emotions: {
+                select: {
+                    img_url: true,
+                    name: true
+                }
+            }
+        },
+        orderBy: { date: 'asc' }
+    })
+}
