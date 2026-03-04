@@ -20,8 +20,6 @@ if (!admin.apps.length) {
     if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
         const serviceAccountPath = path.resolve(process.cwd(), process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
 
-        console.log("📂 Intentando abrir llaves en:", serviceAccountPath);
-
         if (!fs.existsSync(serviceAccountPath)) {
             console.error("❌ ¡El archivo JSON de Firebase no está en esa ruta!");
             process.exit(1);
