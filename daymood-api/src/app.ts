@@ -2,6 +2,7 @@ import express from 'express';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
 import recordsRoutes from './recordService/routes/record.routes';
+import userRoutes from './userService/routes/user.routes'
 import forumRoutes from "./forumService/routes/forumRoutes";
 import postRoutes from "./forumService/routes/postRoutes";
 import commentRoutes from "./forumService/routes/commentRoutes";
@@ -53,6 +54,7 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
 
 
 app.use('/api/records', recordsRoutes);
+app.use('/api/users', userRoutes)
 
 const upload = multer({ storage: multer.memoryStorage() })
 
