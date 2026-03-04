@@ -1,6 +1,5 @@
 node_modules
 # Keep environment variables out of version control
 .env
-/src/generated/prism
-service-account.json
-serviceAccountKey.json
+/src/generated/prisma
+src/serviceAccountkey.json
