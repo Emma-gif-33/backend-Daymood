@@ -1,16 +1,16 @@
 import * as formRepository from "../repository/form.repository";
 
 const questions: Record<string, string> = { //esto lo cambio después con las preguntas reales xd
-    q1: "Pregunta 1",
-    q2: "Pregunta 2",
-    q3: "Pregunta 3",
-    q4: "Pregunta 4",
-    q5: "Pregunta 5",
-    q6: "Pregunta 6",
-    q7: "Pregunta 7",
-    q8: "Pregunta 8",
-    q9: "Pregunta 9",
-    q10: "Pregunta 10"
+    q1: "Normalmente dedico tiempo a mis emociones.",
+    q2: "Pienso que debo prestar atención a mis emociones y sentimientos.",
+    q3: "Frecuentemente tengo claros mis pensamientos",
+    q4: "",
+    q5: "",
+    q6: "",
+    q7: "",
+    q8: "",
+    q9: "",
+    q10: ""
 }
 
 const formatFormWithQuestions = (form: any) => { //Acá se hace el conjunto de pregunta-respuesta chido
