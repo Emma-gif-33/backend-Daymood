@@ -6,9 +6,8 @@ import postRoutes from "./forumService/routes/postRoutes";
 import commentRoutes from "./forumService/routes/commentRoutes";
 import formRoutes from "./formService/route/form.routes";
 import multer from 'multer'
-import * as emotionController from '../src/emotionService/controllers/emotion.controllers'
-import router from "./formService/route/form.routes";
 import emotionRoutes from "./emotionService/routes/emotion.routes";
+import statsRoutes from "./analiticsService/routes/statsRoutes";
 
 const app = express();
 
@@ -57,14 +56,8 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/forms', formRoutes);
 app.use('/api/emotions', emotionRoutes);
-router.get('/favorites', verifyToken, emotionController.getFavorites)
-router.post('/favorites/:id', verifyToken, emotionController.addFavorite)
-router.delete('/favorites/:id', verifyToken, emotionController.removeFavorite)
+app.use('/api/stats', statsRoutes);
 
-router.get('/explore', verifyToken, emotionController.explore)
-router.get('/', verifyToken, emotionController.getAll)
-router.post('/', verifyToken, upload.single('image'), emotionController.create)
-router.delete('/:id', verifyToken, emotionController.deleteEmotion)
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
