@@ -145,7 +145,7 @@ export const removeFavorite = async (req: AuthRequest, res: Response, next: Next
         res.json({ success: true, message: 'Eliminado de favoritos' })
 
     } catch (error: any) {
-        if (error.code === 'P2025') { // Código Prisma de "record not found"
+        if (error.code === 'P2025') { 
             return res.status(404).json({ 
                 success: false, 
                 message: 'Este favorito no existe o ya fue eliminado' 
