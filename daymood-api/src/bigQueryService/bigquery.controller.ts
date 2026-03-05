@@ -1,20 +1,26 @@
 import { Request, Response } from 'express';
-import { insertSnapshot } from './bigquery.service';
+import { dailyCutoff } from './bigquery.service';
 
-export const testBigQuery = async (req: Request, res: Response): Promise<void> => {
+export const dailyCutoffController = async (req: Request, res: Response): Promise<void> => {
     try {
-        await insertSnapshot();
+        const result = await dailyCutoff();
         res.status(200).json({
             success: true,
-            message: 'Snapshot enviado a BigQuery correctamente',
-            data: null
+            message: `Corte del día ejecutado correctamente. ${result.rowsSent} filas enviadas a BigQuery.`,
+            data: {
+                rowsSent: result.rowsSent,
+                csvFile: result.csvFile,
+                timestamp: new Date().toISOString()
+            }
         });
     } catch (error: any) {
-        console.error('BigQuery error:', error?.message);
+        console.error('Error en corte del día:', error.message);
         res.status(500).json({
             success: false,
-            message: error?.message || 'Error al enviar snapshot a BigQuery',
+            message: error.message || 'Error al ejecutar el corte del día',
             data: null
         });
     }
 };
+
+export const testBigQuery = dailyCutoffController;
