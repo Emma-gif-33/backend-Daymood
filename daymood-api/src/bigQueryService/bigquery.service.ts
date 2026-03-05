@@ -1,43 +1,24 @@
 import { BigQuery } from '@google-cloud/bigquery';
 import { prisma } from '../../prisma/prisma.client';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const bigquery = new BigQuery({
     keyFilename: 'service-account.json',
     projectId: 'data-from-software'
 });
 
-export async function insertSnapshot() {
+export async function dailyCutoff() {
+    
     const stats = await prisma.$queryRaw<any[]>`
-        SELECT
-            5 AS project_id,
-            CURRENT_DATE AS snapshot_date,
-            queryid::text AS queryid,
-            dbid,
-            userid,
-            query,
-            calls,
-            total_exec_time AS total_exec_time_ms,
-            mean_exec_time AS mean_exec_time_ms,
-            min_exec_time AS min_exec_time_ms,
-            max_exec_time AS max_exec_time_ms,
-            stddev_exec_time AS stddev_exec_time_ms,
-            rows AS rows_returned,
-            shared_blks_hit,
-            shared_blks_read,
-            shared_blks_dirtied,
-            shared_blks_written,
-            temp_blks_read,
-            temp_blks_written
-        FROM pg_stat_statements
-        ORDER BY total_exec_time DESC
-        LIMIT 100
+        SELECT * FROM export_daily_query_metrics
     `;
-
+    //en casode que el pg_stat_satements no este activo
     if (!stats || stats.length === 0) {
-        console.log('No hay estadísticas para enviar');
-        return;
+        throw new Error('No hay métricas para exportar. Verifica que pg_stat_statements esté activo y calls > 0');
     }
 
+    // 2. Formatear filas para BigQuery
     const rows = stats.map(s => ({
         project_id: 5,
         snapshot_date: new Date().toISOString().split('T')[0],
@@ -60,14 +41,43 @@ export async function insertSnapshot() {
         temp_blks_written: Number(s.temp_blks_written ?? 0)
     }));
 
+    //csv de respaldo
+    const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    const csvFileName = `project_5_${today}.csv`;
+    const csvPath = path.join(process.cwd(), 'snapshots', csvFileName);
+
+    //carpeta si no existe
+    if (!fs.existsSync(path.join(process.cwd(), 'snapshots'))) {
+        fs.mkdirSync(path.join(process.cwd(), 'snapshots'));
+    }
+
+    const headers = Object.keys(rows[0]).join(',');
+    const csvRows = rows.map(r => Object.values(r).join(','));
+    fs.writeFileSync(csvPath, [headers, ...csvRows].join('\n'), 'utf-8');
+    console.log(`📄 CSV generado: ${csvFileName}`);
+
+    
     const dataset = bigquery.dataset('benchmarking_warehouse');
     const table = dataset.table('daily_query_metrics');
 
     await table.insert(rows);
-    console.log(`Snapshot enviado a BigQuery: ${rows.length} filas`);
+    console.log(`${rows.length} filas enviadas a BigQuery`);
+
+    
+    await prisma.$executeRaw`SELECT pg_stat_statements_reset()`;
+    console.log('pg_stat_statements reseteado');
+
+    return {
+        rowsSent: rows.length,
+        csvFile: csvFileName
+    };
 }
 
-// Mantener insertTestRow para no romper el controller existente
+
+export async function insertSnapshot() {
+    return dailyCutoff();
+}
+
 export async function insertTestRow() {
-    return insertSnapshot();
+    return dailyCutoff();
 }
