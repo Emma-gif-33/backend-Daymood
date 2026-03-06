@@ -38,7 +38,7 @@ export const getFormById = async (id: string) => {
     if (!form) {
         throw new Error("Weekly survey not found");
     }
-    return form.map(formatFormWithQuestions(form));
+    return (formatFormWithQuestions(form));
 };
 
 export const getFormsByWeek = async (dateString: string) => {
@@ -60,7 +60,7 @@ export const saveWeeklyForm = async (userId: string, answers: Record<string, num
 
     const newForm = await formRepository.create({
         id_user: userId,
-        answers: answers, 
+        answers: answers,
         date: new Date()
     });
 
