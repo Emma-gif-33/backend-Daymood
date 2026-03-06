@@ -14,14 +14,14 @@ if (!admin.apps.length) {
     const result = dotenv.config({path: envPath});
 
     if (result.error) {
-        console.error("❌ Error cargando dotenv:", result.error);
+        console.error("Error cargando dotenv:", result.error);
     }
 
     if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
         const serviceAccountPath = path.resolve(process.cwd(), process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
 
         if (!fs.existsSync(serviceAccountPath)) {
-            console.error("❌ ¡El archivo JSON de Firebase no está en esa ruta!");
+            console.error("¡El archivo JSON de Firebase no está en esa ruta!");
             process.exit(1);
         }
 
