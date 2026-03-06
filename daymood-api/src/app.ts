@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
 import recordsRoutes from './recordService/routes/record.routes';
@@ -14,6 +15,14 @@ import bigQueryRoutes from './bigQueryService/bigquery.routes';
 
 
 const app = express();
+
+app.use(cors());
+
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://tu-app-en-produccion.com'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 
