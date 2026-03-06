@@ -18,12 +18,6 @@ const app = express();
 
 app.use(cors());
 
-app.use(cors({
-    origin: ['http://localhost:5173', 'https://tu-app-en-produccion.com'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 app.use(express.json());
 
 // Log para ver todas las peticiones
