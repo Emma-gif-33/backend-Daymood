@@ -123,3 +123,10 @@ export const findPreviewByMonth = (idUser: string, year: number, month: number) 
         orderBy: { date: 'asc' }
     })
 }
+
+export const findAllHabits = () => {
+    return prisma.habits.findMany({
+        include: { categories: true },
+        orderBy: { id_category: 'asc' }
+    })
+}

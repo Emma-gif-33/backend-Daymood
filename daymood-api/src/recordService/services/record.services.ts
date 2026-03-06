@@ -98,3 +98,30 @@ export const createRecord = async (
     const userId = await getUserId(firebaseUid)
     return recordRepository.findPreviewByMonth(userId, year, month)
 }
+
+export const getHabitsByCategory = async () => {
+    const habits = await recordRepository.findAllHabits()
+
+    
+    const grouped = habits.reduce((acc, habit) => {
+        const categoryName = habit.categories.name
+        const categoryId = habit.id_category
+
+        if (!acc[categoryId]) {
+            acc[categoryId] = {
+                id_category: categoryId,
+                category_name: categoryName,
+                habits: []
+            }
+        }
+
+        acc[categoryId].habits.push({
+            id: habit.id,
+            name: habit.name
+        })
+
+        return acc
+    }, {} as Record<number, { id_category: number, category_name: string, habits: { id: string, name: string }[] }>)
+
+    return Object.values(grouped)
+}

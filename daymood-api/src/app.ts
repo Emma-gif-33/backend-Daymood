@@ -56,7 +56,6 @@ app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
     });
 });
 
-
 app.use('/api/records', recordsRoutes);
 app.use('/api/users', userRoutes)
 

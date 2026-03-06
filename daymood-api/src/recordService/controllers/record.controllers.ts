@@ -2,6 +2,15 @@ import * as recordService from '../services/record.services'
 import { Response, NextFunction } from 'express'
 import { AuthRequest } from '../../middlewares/auth.middleware'
 
+export const getHabits = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const habits = await recordService.getHabitsByCategory()
+        res.json({ success: true, data: habits })
+    } catch (error) {
+        next(error)
+    }
+}
+
 const handleError = (error: any, res: Response) => {
     const businessErrors = [
         'La fecha es obligatoria',
@@ -96,3 +105,5 @@ export const getMonthPreview = async (req: AuthRequest, res: Response, next: Nex
         handleError(error, res)
     }
 }
+
+
