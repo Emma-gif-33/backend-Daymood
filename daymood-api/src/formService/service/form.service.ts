@@ -4,13 +4,13 @@ const questions: Record<string, string> = { //esto lo cambio después con las pr
     q1: "Normalmente dedico tiempo a mis emociones.",
     q2: "Pienso que debo prestar atención a mis emociones y sentimientos.",
     q3: "Frecuentemente tengo claros mis pensamientos",
-    q4: "",
-    q5: "",
-    q6: "",
-    q7: "",
-    q8: "",
-    q9: "",
-    q10: ""
+    q4: "Pienso en mi estado de ánimo constantemente",
+    q5: "Casi siempre sé cómo me siento",
+    q6: "Normalmente conozco mis sentimientos sobre las personas.",
+    q7: "A menudo me doy cuenta de mis sentimientos en diferentes situaciones.",
+    q8: "Puedo llegar a comprender mis sentimientos.",
+    q9: "Si doy demasiadas vueltas a las cosas, complicándolas, trato de calmarme.",
+    q10: "Me preocupo por tener un buen estado de ánimo."
 }
 
 const formatFormWithQuestions = (form: any) => { //Acá se hace el conjunto de pregunta-respuesta chido
@@ -50,4 +50,19 @@ export const getFormsByWeek = async (dateString: string) => {
 
     const forms = await formRepository.findByDateRange(startDate, endDate);
     return forms.map(formatFormWithQuestions);
+};
+
+export const saveWeeklyForm = async (userId: string, answers: Record<string, number>) => {
+    // Validamos que vengan respuestas (puedes validar que estén las 10 si quieres)
+    if (!answers || Object.keys(answers).length === 0) {
+        throw new Error("Debes proporcionar las respuestas al cuestionario");
+    }
+
+    const newForm = await formRepository.create({
+        id_user: userId,
+        answers: answers, 
+        date: new Date()
+    });
+
+    return formatFormWithQuestions(newForm);
 };
