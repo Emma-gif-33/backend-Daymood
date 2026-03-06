@@ -24,3 +24,8 @@ export const findByDateRange = (startDate: Date, endDate: Date) => {
     });
 };
 
+export const create = (data: { id_user: string, answers: any, date: Date }) => {
+    return prisma.weekly_form.create({
+        data
+    });
+};

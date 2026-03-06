@@ -1,5 +1,6 @@
 import * as formService from "../service/form.service";
 import { Request, Response, NextFunction } from 'express';
+import {AuthRequest} from "../../middlewares/auth.middleware";
 
 
 export const getAll = async (req: Request, res: Response, next: NextFunction) => {
@@ -35,5 +36,25 @@ export const getByWeek = async (req: any, res: any, next: any) => {
         res.json(forms);
     } catch (error) {
         next(error);
+    }
+};
+
+export const postForm = async (req: AuthRequest, res: Response) => {
+    try {
+        const { answers } = req.body;
+        const userId = req.user.id;
+
+        const savedForm = await formService.saveWeeklyForm(userId, answers);
+
+        return res.status(201).json({
+            success: true,
+            message: "Cuestionario semanal guardado correctamente",
+            data: savedForm
+        });
+    } catch (error: any) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
     }
 };
