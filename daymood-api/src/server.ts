@@ -6,3 +6,4 @@ const PORT = 3000;
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
