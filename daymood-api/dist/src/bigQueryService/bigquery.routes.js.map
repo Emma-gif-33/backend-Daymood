@@ -1,0 +1,1 @@
+{"version":3,"file":"bigquery.routes.js","sourceRoot":"","sources":["../../../src/bigQueryService/bigquery.routes.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,+DAA4E;AAE5E,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,MAAM,CAAC,IAAI,CAAC,SAAS,EAAE,2CAAqB,CAAC,CAAC;AAC9C,MAAM,CAAC,IAAI,CAAC,UAAU,EAAE,kCAAY,CAAC,CAAC;AAEtC,kBAAe,MAAM,CAAC"}
