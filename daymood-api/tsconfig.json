@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDirs": ["src", "prisma"],
     "outDir": "./dist",
     "module": "CommonJS",
     "target": "ES2020",
