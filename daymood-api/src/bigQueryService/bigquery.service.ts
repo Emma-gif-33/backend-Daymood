@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const bigquery = new BigQuery({
-    keyFilename: 'service-account.json',
+    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON!),
     projectId: 'data-from-software'
 });
 
