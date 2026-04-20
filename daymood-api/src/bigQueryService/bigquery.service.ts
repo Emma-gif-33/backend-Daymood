@@ -18,7 +18,7 @@ export async function dailyCutoff() {
         throw new Error('No hay métricas para exportar. Verifica que pg_stat_statements esté activo y calls > 0');
     }
 
-    // 2. Formatear filas para BigQuery
+    // Formatear filas para BigQuery
     const rows = stats.map(s => ({
         project_id: 5,
         snapshot_date: new Date().toISOString().split('T')[0],

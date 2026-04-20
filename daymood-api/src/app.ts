@@ -2,6 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import { verifyToken, AuthRequest } from './middlewares/auth.middleware';
 import { Response } from 'express';
+import { errorHandler } from './middlewares/error.middlewares';
+import { requestLogger } from './middlewares/logger.middleware';
+import { generalLimiter, authLimiter, bigqueryLimiter } from './middlewares/rateLimit.middleware';
+import { verifyApiKey } from './middlewares/apiKey.middleware';
+
 import recordsRoutes from './recordService/routes/record.routes';
 import userRoutes from './userService/routes/user.routes'
 import forumRoutes from "./forumService/routes/forumRoutes";
@@ -15,10 +20,11 @@ import bigQueryRoutes from './bigQueryService/bigquery.routes';
 
 
 const app = express();
-
+app.use(generalLimiter);
 app.use(cors());
-
 app.use(express.json());
+app.use(requestLogger);
+
 
 // Log para ver todas las peticiones
 app.use((req, res, next) => {
@@ -41,6 +47,8 @@ app.get('/test-token', verifyToken, (req: AuthRequest, res: Response) => {
         email: req.user!.email
     });
 });
+//const upload = multer({ storage: multer.memoryStorage() });
+
 
 
 app.post('/auth/register', verifyToken, (req: AuthRequest, res: Response) => {
@@ -68,7 +76,7 @@ app.use('/api/forms', formRoutes);
 app.use('/api/emotions', emotionRoutes);
 app.use('/api/stats', statsRoutes);
 
-app.use('/api/bigquery', bigQueryRoutes);
+app.use('/api/bigquery', verifyApiKey, bigqueryLimiter, bigQueryRoutes);
 
 // Catch-all para rutas no encontradas
 app.use((req, res) => {
@@ -76,4 +84,5 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
+app.use(errorHandler)
 export default app;
