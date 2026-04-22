@@ -24,6 +24,9 @@ export const createNewPost = async (req: Request, res: Response, next: NextFunct
     }
 };
 
+
+
+
 export const getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;

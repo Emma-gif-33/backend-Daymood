@@ -12,6 +12,8 @@ export const getPostById = async (id: string) => {
     return post;
 };
 
+
+
 export const updatePost = async (postId: string, userId: string, updateData: any) => {
     const post = await postRepository.findById(postId);
     if (!post) throw new Error("Post no encontrado");
@@ -31,3 +33,4 @@ export const deletePost = async (postId: string, userId: string) => {
 
     return await postRepository.remove(postId);
 };
+

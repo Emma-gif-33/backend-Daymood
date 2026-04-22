@@ -19,6 +19,9 @@ export const findById = (id: string) => {
     });
 };
 
+
+
+
 export const update = (id: string, data: { title?: string, content?: string }) => {
     return prisma.posts.update({
         where: { id },

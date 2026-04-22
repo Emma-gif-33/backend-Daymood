@@ -20,6 +20,7 @@ export const loginUserSchema = z.object({
 export const createPostSchema = z.object({
     title: z.string().min(3, 'El título debe tener al menos 3 caracteres').max(150, 'El título no puede superar 150 caracteres'),
     content: z.string().min(10, 'El contenido debe tener al menos 10 caracteres').max(2000, 'El contenido no puede superar 2000 caracteres'),
+    id_category: z.coerce.number().int().positive(),
     id_forum: z.string().uuid('id_forum debe ser un UUID válido')
 });
 
