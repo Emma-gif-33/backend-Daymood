@@ -20,7 +20,7 @@ import bigQueryRoutes from './bigQueryService/bigquery.routes';
 
 
 const app = express();
-// app.use(generalLimiter);
+app.use(generalLimiter);
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);

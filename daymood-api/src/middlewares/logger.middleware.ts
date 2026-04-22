@@ -15,7 +15,7 @@ function sanitizeBody(body: any): any {
 }
 
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
-    const sanitizedBody = sanitizeBody(req.body);
+    const sanitizedBody = sanitizeBody(req.body ?? {});
     console.log(`${req.method} ${req.path}`,
         Object.keys(sanitizedBody).length > 0 ? `Body: ${JSON.stringify(sanitizedBody)}` : ''
     );
