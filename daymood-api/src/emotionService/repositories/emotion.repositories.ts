@@ -76,10 +76,3 @@ export const deleteById = (id: string) => {
     return prisma.emotions.delete({ where: { id } })
 }
 
-// findAllForUser(userId) — trae las predeterminadas (donde id_user es null) + las personalizadas del usuario. Piensa en cómo combinar ambas con Prisma usando OR.
-// findCustomByOthers(userId) — todas las personalizadas excepto las del usuario actual.
-// create(data) — crear una emoción, con el tipo correcto de Prisma.
-// findById(id) — buscar por id para validar antes de eliminar.
-// addFavorite(userId, emotionId) — insertar en tabla favorites.
-// removeFavorite(userId, emotionId) — eliminar de favorites.
-// findFavoritesByUser(userId) — listar favoritos con los datos de la emoción.
