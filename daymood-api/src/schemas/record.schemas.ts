@@ -35,3 +35,4 @@ export const createCommentSchema = z.object({
     content: z.string().min(1, 'El comentario no puede estar vacío').max(1000, 'El comentario no puede superar 1000 caracteres'),
     id_post: z.string().uuid('id_post debe ser un UUID válido')
 });
+
