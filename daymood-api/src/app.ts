@@ -20,7 +20,7 @@ import bigQueryRoutes from './bigQueryService/bigquery.routes';
 
 
 const app = express();
-app.use(generalLimiter);
+// app.use(generalLimiter);
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
@@ -82,6 +82,11 @@ app.use('/api/bigquery', verifyApiKey, bigqueryLimiter, bigQueryRoutes);
 app.use((req, res) => {
     console.log(`Ruta no encontrada: ${req.method} ${req.path}`);
     res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error('GLOBAL ERROR CAUGHT:', err.message, err.stack);
+    next(err);
 });
 
 app.use(errorHandler)
