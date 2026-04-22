@@ -14,6 +14,7 @@ const calculateAge = (birthday: string | Date): number => {
 };
 
 export const register = async (req: Request, res: Response) => {
+    console.log('REGISTER BODY:', JSON.stringify(req.body))
     try {
         const { firebase_uid, username, email, birth_day } = req.body
 

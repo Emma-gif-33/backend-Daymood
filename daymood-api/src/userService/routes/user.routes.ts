@@ -6,7 +6,7 @@ import { createUserSchema, loginUserSchema } from '../../schemas/record.schemas'
 
 const router = Router()
 
-router.post('/register',validate(createUserSchema), userController.register)
+router.post('/register',/*validate(createUserSchema),*/ userController.register)
 router.post('/login', validate(loginUserSchema), userController.login)
 router.get('/me', verifyToken, userController.getMe)
 
